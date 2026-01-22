@@ -1,5 +1,5 @@
 # --- Security & Credentials ---
-config.json
+config/config.json
 credentials.json
 user_session/
 
@@ -20,6 +20,6 @@ __pycache__/
 *.pyc
 
 # --- Logs & Local Data ---
-logs.txt
+data/logs.txt
 .DS_Store
 Thumbs.db

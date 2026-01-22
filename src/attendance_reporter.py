@@ -20,7 +20,7 @@ def setup_logger():
     file_formatter = logging.Formatter('%(asctime)s | %(levelname)-8s | %(message)s')
     console_formatter = logging.Formatter('[%(asctime)s] %(message)s', datefmt='%H:%M:%S')
 
-    file_handler = logging.FileHandler('logs.txt', encoding='utf-8')
+    file_handler = logging.FileHandler('data/logs.txt', encoding='utf-8')
     file_handler.setFormatter(file_formatter)
 
     console_handler = logging.StreamHandler()
@@ -46,7 +46,7 @@ def normalize_text(text):
     text = "".join([c for c in text if unicodedata.category(c) != 'Mn'])
     return text.lower().strip()
 
-def load_config(config_path="config.json"):
+def load_config(config_path="config/config.json"):
     """Loads configuration from JSON file."""
     if not os.path.exists(config_path):
         raise FileNotFoundError(f"Config file not found: {config_path}")

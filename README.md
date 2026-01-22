@@ -1,6 +1,8 @@
+---
+
 # 📘 Automated WhatsApp Attendance Reporter
 
-This project is a Python solution designed to automate light attendance notifications. It synchronizes data from **Google Sheets**, evaluates multiple absence types (Unjustified and Justified), and dispatches personalized, formatted messages via **WhatsApp Web** using Playwright.
+This project is a Python solution designed to automate attendance notifications. It synchronizes data from **Google Sheets**, evaluates multiple absence types (Unjustified and Justified), and dispatches personalized, formatted messages via **WhatsApp Web** using Playwright.
 
 ---
 
@@ -58,37 +60,27 @@ playwright install chromium
 
 ---
 
-## 3️⃣ Google Cloud Configuration (One-time Setup)
+## 3️⃣ Google Cloud Configuration
 
 ### 3.1 Enable APIs
 
 1. Go to the [Google Cloud Console](https://console.cloud.google.com).
 2. Create a new project.
-3. Navigate to **APIs & Services > Library** and enable:
-* **Google Sheets API**
-* **Google Drive API**
-
-
+3. Enable **Google Sheets API** and **Google Drive API**.
 
 ### 3.2 Credentials
 
-1. Go to **IAM & Admin > Service Accounts** and create a service account.
-2. Click on the account -> **Keys** tab -> **Add Key** -> **Create new key (JSON)**.
-3. **Rename** the downloaded file to `credentials.json` and place it in the project root.
-
-### 3.3 Share the Spreadsheet
-
-1. Open your Google Sheet.
-2. Click **Share** and add the service account email (e.g., `bot@project.iam.gserviceaccount.com`).
-3. Set permission to **Viewer** (or Editor if you plan to write data back later).
+1. Create a **Service Account** and download the **JSON Key**.
+2. **Rename** the file to `credentials.json` and place it in the project root.
+3. **Share** your Google Sheet with the Service Account email as **Viewer**.
 
 ---
 
 ## 4️⃣ Configuration
 
-### 4.1 `config.json`
+### 4.1 `config/config.json`
 
-Define your automation rules and message templates:
+Define your automation rules and message templates. A sample is provided in `config/config-sample.json`.
 
 ```json
 {
@@ -109,10 +101,6 @@ Define your automation rules and message templates:
   "patterns": {
     "date_regex": "(\\d{1,4}[-/]\\d{1,2}[-/]\\d{1,4})|(\\d{1,2}[-/]\\d{1,2})"
   },
-  "contacts": {
-    "Angel Garcia": ["+34600000000"],
-    "Antonio Calvente": ["+34611111111"]
-  },
   "messages": {
     "header_with_absences": "Hello {nombre}, here is your attendance report:",
     "footer_with_absences": "Please remember to justify your absences.",
@@ -121,46 +109,53 @@ Define your automation rules and message templates:
     "label_justified": "*✅ Justified Absences:*"
   }
 }
-
 ```
 
 ---
 
-## 5️⃣ Key Features
+## 5️⃣ Project Structure
 
-* **Session Persistence:** Browser data is saved in `./user_session/`. Scan the QR code once and stay logged in.
-* **Custom Absence Labels:** Define how "Justified" vs "Unjustified" absences appear in the message.
-* **Advanced Formatting:** Automatically builds messages with bold headers and bullet points.
-* **Name Normalization:** Intelligent matching that ignores accents and casing (e.g., "Música" matches "musica").
-* **Dual Logging:** Real-time console status and persistent history in `logs.txt`.
+This project follows a clean architecture to separate code, configuration, and data:
+
+```text
+whatsapp-attendance-reporter/
+├── src/                        # Source code
+│   └── attendance_reporter.py
+├── config/                     # Configuration files
+│   ├── config.json             # Actual config (Private)
+│   └── config-sample.json      # Template for users
+├── data/                       # Local data and logs
+│   ├── attendance-example.xlsx # Visual reference
+│   └── logs.txt                # Auto-generated history
+├── .gitignore                  # Prevents uploading sensitive data
+├── LICENSE                     # MIT License
+├── README.md                   # Documentation
+└── requirements.txt            # Python dependencies
+```
 
 ---
 
 ## 6️⃣ Running the Script
 
-Ensure your virtual environment is active, then execute:
+Ensure your virtual environment is active and you are in the project root directory, then execute:
 
 ```bash
-python attendance_reporter.py
+python src/attendance_reporter.py
 ```
 
 ### Execution Flow:
 
-1. **GSHEETS:** Connects and downloads attendance records.
+1. **GSHEETS:** Fetches attendance records from the cloud.
 2. **BROWSER:** Launches Chromium and opens WhatsApp Web.
-3. **WAITING:** Waits for QR scan (first time) or loads existing session.
-4. **SENDING:** Iterates through students, builds custom reports, and sends messages.
-5. **DONE:** Closes browser and updates logs.
+3. **WAITING:** Loads existing session or waits for QR scan.
+4. **SENDING:** Dispatches personalized reports with bold headers and bullets.
+5. **DONE:** Updates `data/logs.txt` and closes session.
 
 ---
 
-## 7️⃣ Project Structure
+## 7️⃣ Security & Recommendations
 
-```text
-├── attendance_reporter.py # Main Python script
-├── config.json            # Configuration and message templates
-├── credentials.json       # Google Cloud Service Account Key (Private)
-├── requirements.txt       # Python dependencies
-├── logs.txt               # Execution history
-└── user_session/          # Persistent WhatsApp login data
-```
+* **Persistence:** Session data is saved in `./user_session/`. Scan once, stay logged in.
+* **Normalization:** Matches "Ángel" with "angel" automatically.
+* **Privacy:** `credentials.json`, `config.json`, and `user_session/` are ignored by git to protect your data.
+---
