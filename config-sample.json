@@ -1,0 +1,33 @@
+{
+  "auth": {
+    "scopes": [
+      "https://spreadsheets.google.com/feeds",
+      "https://www.googleapis.com/auth/drive"
+    ],
+    "credentials_file": "credentials.json"
+  },
+  "spreadsheet": {
+    "name": "Attendance",
+    "sheet_name": "January 2026"
+  },
+  "data_mapping": {
+    "id_column": "Name",
+    "positive_value": "Yes",
+    "justified_value": "Justified",
+    "negative_value": "No"
+  },
+  "patterns": {
+    "date_regex": "(\\d{1,4}[-/]\\d{1,2}[-/]\\d{1,4})|(\\d{1,2}[-/]\\d{1,2})"
+  },
+  "contacts": {
+    "Peter Parker": ["+123456789", "+123456789"],
+    "Tony Stark": ["+123456789"]
+  },
+  "messages": {
+    "header_with_absences": "Hello {name}, here is your attendance report:",
+    "footer_with_absences": "Please remember to attend.",
+    "no_absences": "Hello {name}, you had perfect attendance in {month}!",
+    "label_unjustified": "*❌ Unjustified Absences:*",
+    "label_justified": "*✅ Justified Absences:*"
+  }
+}

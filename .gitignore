@@ -1,0 +1,25 @@
+# --- Security & Credentials ---
+config.json
+credentials.json
+user_session/
+
+# --- IDEs and Editors ---
+# JetBrains (PyCharm, IntelliJ, etc.)
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# --- Python Environment ---
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# --- Logs & Local Data ---
+logs.txt
+.DS_Store
+Thumbs.db
